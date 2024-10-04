@@ -35,6 +35,8 @@ func (app *application) routes() http.Handler {
 	// 同理添加中间件保护路由
 	mux.Post("/user/logout", dynamicMiddleware.Append(app.requireAuthenticatedUser).ThenFunc(app.logoutUser))
 
+	// 添加处理函数为了About界面
+	mux.Get("/about", dynamicMiddleware.ThenFunc(app.about))
 	// 注册ping处理器为了测试用
 	mux.Get("/ping", http.HandlerFunc(ping))
 

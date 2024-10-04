@@ -192,6 +192,11 @@ func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
+// 实现展示app介绍页面，只涉及静态信息，不涉及用户输入
+func (app *application) about(w http.ResponseWriter, r *http.Request) {
+	app.render(w, r, "about.page.tmpl", &templateData{})
+}
+
 // 用于测试
 func ping(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("OK"))

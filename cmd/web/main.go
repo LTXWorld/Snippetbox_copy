@@ -44,7 +44,7 @@ type application struct {
 func main() {
 	// 定义一个新的命令行标志，默认值+描述
 	// 标志值将会被存储在运行时的addr变量中，将所传的值转换为String，为了下方监听所传入参数
-	addr := flag.String("addr", ":4000", "HTTP network address")
+	addr := flag.String("addr", "0.0.0.0:4000", "HTTP network address")
 
 	// 定义另一个标志表示数据库连接描述
 	dsn := flag.String("dsn", "web:iutaol123@/snippetbox?parseTime=true", "MySQL data source name")
