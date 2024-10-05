@@ -40,6 +40,11 @@ type application struct {
 		Get(int) (*models.User, error)
 		UpdatePassword(int, string) error
 	}
+	//
+	snippetsImages interface {
+		Insert(int, string) error
+		GetImagesBySnippetID(int) ([]string, error)
+	}
 }
 
 func main() {
@@ -85,12 +90,13 @@ func main() {
 
 	// 初始化一个新的application实例包括这些依赖
 	app := &application{
-		errorLog:      errorLog,
-		infoLog:       infoLog,
-		snippets:      &mysql.SnippetModel{DB: db},
-		templateCache: templateCache,
-		session:       session,
-		users:         &mysql.UserModel{DB: db},
+		errorLog:       errorLog,
+		infoLog:        infoLog,
+		snippets:       &mysql.SnippetModel{DB: db},
+		templateCache:  templateCache,
+		session:        session,
+		users:          &mysql.UserModel{DB: db},
+		snippetsImages: &mysql.SnippetImageModel{DB: db},
 	}
 
 	// 初始化一个tls.Config结构体去保存我们想要服务器使用的TLS设置
