@@ -65,7 +65,7 @@ func (app *application) createSnippetForm(w http.ResponseWriter, r *http.Request
 func (app *application) createSnippet(w http.ResponseWriter, r *http.Request) {
 	// 首先我们调用r.ParseForm()将来自于POST请求体的数据拿到r.PostForm map中
 	// 对PUT，PATCH请求同样有效，如果有错返回400错误
-	err := r.ParseForm()
+	err := r.ParseMultipartForm(30 << 20) // 30MB的大小限制
 	if err != nil {
 		app.clientError(w, http.StatusBadRequest)
 		return
@@ -78,6 +78,12 @@ func (app *application) createSnippet(w http.ResponseWriter, r *http.Request) {
 	form.MaxLength("title", 100)
 	form.PermittedValues("expires", "365", "7", "1")
 
+	// 处理上传的图片文件
+	files := r.MultipartForm.File["images"]
+
+	// 验证图片数量是否超过2张
+	form.MaxFileCount("images", files, 2)
+
 	// 如果表单有错误，重新展示模版内容及其中数据
 	if !form.Valid() {
 		app.render(w, r, "create.page.tmpl", &templateData{Form: form})
@@ -89,6 +95,21 @@ func (app *application) createSnippet(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.serverError(w, err)
 		return
+	}
+
+	// 处理图片文件并把路径保存到数据库表中
+	for _, fileHeader := range files {
+		imagePath, err := app.saveUploadedFile(fileHeader)
+		if err != nil {
+			app.serverError(w, err)
+			return
+		}
+		// 将图片路径和日志ID保存在snippet_images表中
+		err = app.snippetsImages.Insert(id, imagePath)
+		if err != nil {
+			app.serverError(w, err)
+			return
+		}
 	}
 
 	// 使用Put方法去添加一个字符串值和一个响应key给session data
