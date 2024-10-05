@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"github.com/LTXWorld/codingOnLinux/GoProject/snippetbox/pkg/models"
 	"github.com/justinas/nosurf"
+	"io"
+	"mime/multipart"
 	"net/http"
+	"os"
 	"runtime/debug"
 	"time"
 )
@@ -83,4 +86,31 @@ func (app *application) authenticatedUser(r *http.Request) *models.User {
 		return nil
 	}
 	return user
+}
+
+// saveUploadedFile 将上传的文件保存在服务器，并返回保存路径
+func (app *application) saveUploadedFile(fileHeader *multipart.FileHeader) (string, error) {
+	// 打开上传的文件
+	file, err := fileHeader.Open()
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	destPath := "./uploads/" + fileHeader.Filename
+
+	// 创建目标文件
+	destFile, err := os.Create(destPath)
+	if err != nil {
+		return "", err
+	}
+	defer destFile.Close()
+
+	// 将上传的文件内容复制到目标文件
+	_, err = io.Copy(destFile, file)
+	if err != nil {
+		return "", err
+	}
+
+	return destPath, nil
 }
