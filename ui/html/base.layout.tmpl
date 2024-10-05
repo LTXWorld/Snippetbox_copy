@@ -30,6 +30,8 @@
                         <!-- 增加了上下文后，可以获取到用户的个人信息，可以用于展示 -->
                         <button>退出登录 ({{.AuthenticatedUser.Name}})</button>
                     </form>
+                    <!-- 添加重置密码链接，仅在已登录用户显示 -->
+                    <a href="/user/resetpassword" style="margin-left: 10px;">重置密码</a>
                 {{else}}
                     <a href="/user/signup">注册用户</a>
                     <a href="/user/login">用户登录</a>
