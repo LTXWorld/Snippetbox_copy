@@ -2,6 +2,7 @@ package forms
 
 import (
 	"fmt"
+	"mime/multipart"
 	"net/url"
 	"regexp"
 	"strings"
@@ -95,6 +96,13 @@ func (f *Form) Matches(filed1, filed2 string) {
 	}
 	if value1 != value2 {
 		f.Errors.Add(filed2, "The values do not match")
+	}
+}
+
+// MaxFileCount 检查上传的文件数量是否超过限制
+func (f *Form) MaxFileCount(field string, files []*multipart.FileHeader, maxCount int) {
+	if len(files) > maxCount {
+		f.Errors.Add(field, fmt.Sprintf("你最多只能上传%d张图片", maxCount))
 	}
 }
 
