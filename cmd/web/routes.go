@@ -34,7 +34,9 @@ func (app *application) routes() http.Handler {
 	mux.Post("/user/login", dynamicMiddleware.ThenFunc(app.loginUser))
 	// 同理添加中间件保护路由
 	mux.Post("/user/logout", dynamicMiddleware.Append(app.requireAuthenticatedUser).ThenFunc(app.logoutUser))
-
+	// 添加重置密码的处理路由
+	mux.Get("/user/resetpassword", dynamicMiddleware.Append(app.requireAuthenticatedUser).ThenFunc(app.resetPasswordForm))
+	mux.Post("/user/resetpassword", dynamicMiddleware.Append(app.requireAuthenticatedUser).ThenFunc(app.resetPassword))
 	// 添加处理函数为了About界面
 	mux.Get("/about", dynamicMiddleware.ThenFunc(app.about))
 	// 注册ping处理器为了测试用
