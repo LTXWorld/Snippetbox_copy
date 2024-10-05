@@ -77,3 +77,19 @@ func (m *UserModel) Get(id int) (*models.User, error) {
 
 	return s, nil
 }
+
+func (m *UserModel) UpdatePassword(id int, newPassword string) error {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), 12)
+	if err != nil {
+		return err
+	}
+
+	stmt := `UPDATE users SET hashed_password = ? WHERE id = ?`
+
+	_, err = m.DB.Exec(stmt, string(hashedPassword), id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
