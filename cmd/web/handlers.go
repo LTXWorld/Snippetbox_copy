@@ -197,6 +197,51 @@ func (app *application) about(w http.ResponseWriter, r *http.Request) {
 	app.render(w, r, "about.page.tmpl", &templateData{})
 }
 
+// 添加展示重置密码的页面的处理函数
+func (app *application) resetPasswordForm(w http.ResponseWriter, r *http.Request) {
+	app.render(w, r, "resetpassword.page.tmpl", &templateData{
+		Form: forms.New(nil),
+	})
+}
+
+// 添加处理提交的重置密码的处理函数
+func (app *application) resetPassword(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
+
+	// 检验表单中传来的两个密码,利用到了form.go和helpers.go
+	form := forms.New(r.PostForm)
+	form.Required("new_password", "confirm_password")
+	form.MinLength("new_password", 8)
+	form.Matches("new_password", "confirm_password")
+
+	// 如果上面的几个检验出现错误
+	if !form.Valid() {
+		app.render(w, r, "resetpassword.page.tmpl", &templateData{Form: form})
+		return
+	}
+
+	// 如果没有格式错误，直接获取当前用户ID，仅对已经登录的用户
+	userID, ok := app.session.Get(r, "userID").(int)
+
+	if !ok {
+		app.clientError(w, http.StatusUnauthorized)
+		return
+	}
+
+	err = app.users.UpdatePassword(userID, form.Get("new_password"))
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+	//
+	app.session.Put(r, "flash", "密码修改成功！")
+	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+}
+
 // 用于测试
 func ping(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("OK"))
