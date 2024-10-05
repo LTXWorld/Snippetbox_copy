@@ -85,6 +85,19 @@ func (f *Form) MatchesPattern(field string, pattern *regexp.Regexp) {
 	}
 }
 
+// Matches 检查两个表单的字段是否匹配
+func (f *Form) Matches(filed1, filed2 string) {
+	value1 := f.Get(filed1)
+	value2 := f.Get(filed2)
+
+	if value1 == "" || value2 == "" {
+		return
+	}
+	if value1 != value2 {
+		f.Errors.Add(filed2, "The values do not match")
+	}
+}
+
 // Valid 如果没有错误发生，返回true
 func (f *Form) Valid() bool {
 	return len(f.Errors) == 0
