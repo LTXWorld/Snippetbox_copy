@@ -3,7 +3,7 @@
 {{define "title"}}Create a New Snippet{{end}}
 
 {{define "body"}}
-<form action='/snippet/create' method='POST'>
+<form action='/snippet/create' method='POST' enctype="multipart/form-data">
     <!-- 添加CSRFToken隐藏字段   -->
     <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
     {{with .Form}}
@@ -14,6 +14,7 @@
             {{end}}
             <input type="text" name="title" value='{{.Get "title"}}'>
         </div>
+
         <div>
             <label>Content:</label>
             {{with .Errors.Get "content"}}
@@ -21,7 +22,17 @@
             {{end}}
             <textarea name="content">{{.Get "content"}}</textarea>
         </div>
+        <!--    -->
         <div>
+            <label>上传图片(最多上传两张)</label>
+            {{with .Errors.Get "images"}}
+            <label class="error">{{.}}</label>
+            {{end}}
+            <input type="file" name="images" accept="image/*" multiple>
+        </div>
+        <!--      -->
+        <div>
+
             <label>Delete in:</label>
             {{with .Errors.Get "expires"}}
                 <label class="error">{{.}}</label>
