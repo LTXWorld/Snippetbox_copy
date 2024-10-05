@@ -26,13 +26,12 @@
         <div>
             <label>上传图片(最多上传两张)</label>
             {{with .Errors.Get "images"}}
-            <label class="error">{{.}}</label>
+                <label class="error">{{.}}</label>
             {{end}}
             <input type="file" name="images" accept="image/*" multiple>
         </div>
         <!--      -->
         <div>
-
             <label>Delete in:</label>
             {{with .Errors.Get "expires"}}
                 <label class="error">{{.}}</label>
