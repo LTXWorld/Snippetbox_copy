@@ -29,3 +29,9 @@ type User struct {
 	HashedPassword []byte
 	Created        time.Time
 }
+
+type SnippetImages struct {
+	ID        int
+	SnippetId int
+	ImagePath string
+}
