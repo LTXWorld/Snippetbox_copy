@@ -99,6 +99,9 @@ func (app *application) createSnippet(w http.ResponseWriter, r *http.Request) {
 
 	// 处理图片文件并把路径保存到数据库表中
 	for _, fileHeader := range files {
+		if fileHeader == nil {
+			continue
+		}
 		imagePath, err := app.saveUploadedFile(fileHeader)
 		if err != nil {
 			app.serverError(w, err)
