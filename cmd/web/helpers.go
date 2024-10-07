@@ -72,11 +72,7 @@ func (app *application) render(w http.ResponseWriter, r *http.Request, name stri
 	// 将buffer中的内容写入w中
 	buf.WriteTo(w)
 
-	//// 上面加载模版后，将数据绑定在模版上
-	//err := ts.Execute(w, td)
-	//if err != nil {
-	//	app.serverError(w, err)
-	//}
+	fmt.Println("Before rendering:", td.Images)
 }
 
 // authenticatedUser 方法通过当前用户session中的userID返回用户信息(用户对象)
