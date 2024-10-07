@@ -16,4 +16,14 @@
         </div>
     </div>
     {{end}}
+    <!--   如果有图片，展示图片     -->
+    {{if .Images}}
+    <h3>相关图片:</h3>
+    <div class="images">
+        {{range .Images}}
+        <img src="{{.}}" alt="Snippet Image" style="max-width: 300px;">
+        {{end}}
+    </div>
+    {{end}}
+
 {{end}}
