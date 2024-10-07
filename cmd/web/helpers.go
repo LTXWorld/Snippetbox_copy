@@ -97,7 +97,9 @@ func (app *application) saveUploadedFile(fileHeader *multipart.FileHeader) (stri
 	}
 	defer file.Close()
 
-	destPath := "./uploads/" + fileHeader.Filename
+	// 创建唯一文件名
+	uniqueFilename := fmt.Sprintf("%d_%s", time.Now().UnixNano(), fileHeader.Filename)
+	destPath := "./uploads/" + uniqueFilename
 
 	// 创建目标文件
 	destFile, err := os.Create(destPath)
