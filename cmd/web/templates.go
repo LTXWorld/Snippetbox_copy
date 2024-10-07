@@ -18,6 +18,7 @@ type templateData struct {
 	Flash             string       // 临时消息存储机制
 	AuthenticatedUser *models.User // 之前通过id判断当前用户是否已经登录，现在通过上下文中包含的用户对象
 	CSRFToken         string       // 表示模版中的CSRFToken属性，使每个表单都有一个CSRF令牌
+	Images            []string     // 用于存储图片路径
 }
 
 // 自定义函数humanDate
