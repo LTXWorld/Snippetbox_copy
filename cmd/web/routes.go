@@ -50,9 +50,9 @@ func (app *application) routes() http.Handler {
 	// 去除URL中的/static前缀，将剩余路径交给文件服务器处理
 	mux.Get("/static/", http.StripPrefix("/static", fileServer))
 
-	// 同理，为uploads创建静态文件服务器，处理/uploads/uploads/路径
+	// 同理，为uploads创建静态文件服务器，处理/uploads/文件名 路径
 	uploadFileServer := http.FileServer(http.Dir("./uploads"))
-	mux.Get("/uploads/uploads/", http.StripPrefix("/uploads/uploads/", uploadFileServer))
+	mux.Get("/uploads/", http.StripPrefix("/uploads/", uploadFileServer))
 
 	// Pass the servemux as the next param to the secureHeaders middleware
 	// 直接给serveMux前面添加中间件，将mux包裹起来

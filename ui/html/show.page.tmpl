@@ -17,7 +17,7 @@
     <h3>盒子中的图片:</h3>
     <div class="images" style="display: flex; justify-content: center; flex-wrap: wrap">
         {{range .Images}}
-        <img src="/uploads/{{.}}" alt="Snippet Image" style="max-width: 300px;">
+        <img src="/{{.}}" alt="Snippet Image" style="max-width: 300px;">
         {{end}}
     </div>
     {{end}}
