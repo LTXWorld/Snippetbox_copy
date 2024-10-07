@@ -47,10 +47,17 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// 获取与当前snippet关联的图片路径
+	images, err := app.snippetsImages.GetImagesBySnippetID(id)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
 	// Pass the flash message to the template，将这个逻辑放在了
 	// helpers中默认添加（显示flash）
 	app.render(w, r, "show.page.tmpl", &templateData{
 		Snippet: s,
+		Images:  images, // 新增图片路径
 	})
 }
 
