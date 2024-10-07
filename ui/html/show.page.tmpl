@@ -10,19 +10,22 @@
             <span>#{{.ID}}</span>
         </div>
         <pre><code>{{.Content}}</code></pre>
-        <div class='metadata'>
-            <time>Created: {{humanDate .Created}}</time>
-            <time>Expires: {{.Expires}}</time>
-        </div>
     </div>
     {{end}}
     <!--   如果有图片，展示图片     -->
     {{if .Images}}
-    <h3>相关图片:</h3>
-    <div class="images">
+    <h3>盒子中的图片:</h3>
+    <div class="images" style="display: flex; justify-content: center; flex-wrap: wrap">
         {{range .Images}}
-        <img src="{{.}}" alt="Snippet Image" style="max-width: 300px;">
+        <img src="/uploads/{{.}}" alt="Snippet Image" style="max-width: 300px;">
         {{end}}
+    </div>
+    {{end}}
+
+    {{with .Snippet}}
+    <div class='metadata'>
+        <time>Created: {{humanDate .Created}}</time>
+        <time>Expires: {{.Expires}}</time>
     </div>
     {{end}}
 
