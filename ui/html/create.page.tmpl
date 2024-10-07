@@ -28,9 +28,35 @@
             {{with .Errors.Get "images"}}
                 <label class="error">{{.}}</label>
             {{end}}
-            <input type="file" name="images" accept="image/*" multiple>
+            <input type="file" name="images" id="imageInput" accept="image/*" multiple>
+            <div id="fileList"></div>
         </div>
-        <!--      -->
+        <script>
+            let selectedFiles = [];
+
+            document.getElementById('imageInput').addEventListener('change', function(event) {
+                const fileList = event.target.files;
+
+                // 将新选择的文件添加到已选择文件的数组中
+                for (let i = 0; i < fileList.length; i++) {
+                    selectedFiles.push(fileList[i]);
+                }
+
+                // 更新展示文件列表
+                const fileListDisplay = document.getElementById('fileList');
+                fileListDisplay.innerHTML = ''; // 清空之前的文件名
+
+                // 遍历并展示所有已选择的文件
+                for (let i = 0; i < selectedFiles.length; i++) {
+                    const file = selectedFiles[i];
+                    const listItem = document.createElement('div');
+                    listItem.textContent = file.name;
+                    fileListDisplay.appendChild(listItem);
+                }
+            });
+        </script>
+
+    <!--      -->
         <div>
             <label>Delete in:</label>
             {{with .Errors.Get "expires"}}
